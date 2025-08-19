@@ -122,16 +122,13 @@
           filteredFiles.forEach((file, index) => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${file.name}</td>
-          <td>
-            <button class="btn btn-sm btn-primary" onclick="previewPDF('${
-              file.name
-            }')">View</button>
-            <button class="btn btn-sm btn-danger" onclick="deletePDF('${
-              file.name
-            }')">Delete</button>
-          </td>`;
+              <td>${index + 1}</td>
+              <td>${file.name}</td>
+              <td>
+                <button class="btn btn-sm btn-primary" onclick="previewPDF('${file.name}')">View</button>
+                <button class="btn btn-sm btn-warning" onclick="renamePDF('${file.name}')">Rename</button>
+                <button class="btn btn-sm btn-danger" onclick="deletePDF('${file.name}')">Delete</button>
+              </td>`;
             tbody.appendChild(tr);
           });
         }
@@ -148,6 +145,28 @@
           { method: "DELETE" }
         );
         if (res.ok) fetchFiles();
+      }
+
+      async function renamePDF(oldName) {
+        const newName = prompt("Enter new file name:", oldName);
+        if (!newName || newName.trim() === "" || newName === oldName) return;
+
+        try {
+          const res = await fetch(`http://localhost:3000/api/pr-scanned-list/rename`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ oldName, newName })
+          });
+
+          if (!res.ok) {
+            const { error } = await res.json();
+            alert("Rename failed: " + error);
+          } else {
+            fetchFiles();
+          }
+        } catch (err) {
+          alert("Error renaming file.");
+        }
       }
 
       async function uploadFile(event) {
@@ -168,8 +187,7 @@
       window.onload = () => {
         fetchFiles();
         document.getElementById("searchInput").addEventListener("keyup", fetchFiles);
-        };
-
+      };
     </script>
   </body>
 </html>
