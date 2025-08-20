@@ -2,9 +2,9 @@
   "name": "project001s082025",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "url": "https://github.com/aronkyle-printwell/Project001S082025/issues"
   },
   "homepage": "https://github.com/aronkyle-printwell/Project001S082025#readme",
-  "dependencies": {
+    "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "multer": "^2.0.2"

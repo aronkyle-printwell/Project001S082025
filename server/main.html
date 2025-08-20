@@ -15,7 +15,7 @@
       <div class="row align-items-center justify-content-between">
         <div class="col-2 text-center">
           <img
-            src="C:/Users/aron.suarnaba/Downloads/logo.png"
+            src="https://www.printwell.com.ph/images/logo.gif"
             alt="PrintWell Logo"
             class="rounded-circle"
             style="height: 80px"
@@ -126,7 +126,7 @@
               <td>${file.name}</td>
               <td>
                 <button class="btn btn-sm btn-primary" onclick="previewPDF('${file.name}')">View</button>
-                <button class="btn btn-sm btn-warning" onclick="renamePDF('${file.name}')">Rename</button>
+                <button class="btn btn-sm btn-secondary" onclick="renamePDF('${file.name}')">Rename</button>
                 <button class="btn btn-sm btn-danger" onclick="deletePDF('${file.name}')">Delete</button>
               </td>`;
             tbody.appendChild(tr);
@@ -139,13 +139,26 @@
         iframe.src = `http://localhost:3000/api/pr-scanned-list/view/${filename}`;
       }
 
-      async function deletePDF(filename) {
-        const res = await fetch(
-          `http://localhost:3000/api/pr-scanned-list/delete/${filename}`,
-          { method: "DELETE" }
-        );
-        if (res.ok) fetchFiles();
-      }
+async function deletePDF(filename) {
+  const confirmDelete = confirm(`Are you sure you want to delete "${filename}"?`);
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(
+      `http://localhost:3000/api/pr-scanned-list/delete/${filename}`,
+      { method: "DELETE" }
+    );
+    if (res.ok) {
+      fetchFiles();
+    } else {
+      const { error } = await res.json();
+      alert("Delete failed: " + error);
+    }
+  } catch (err) {
+    alert("Error deleting file.");
+  }
+}
+
 
       async function renamePDF(oldName) {
         const newName = prompt("Enter new file name:", oldName);
