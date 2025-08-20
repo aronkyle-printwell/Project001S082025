@@ -1,3 +1,8 @@
+/*-- Created By: Aron Kyle D. Suarnaba - System Analyst Programmer Trainee
+//Date: August 2025 
+Site: Printwell, Inc.
+*/
+
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
